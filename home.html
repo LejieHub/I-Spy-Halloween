@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main Page</title>
+    <link rel="stylesheet" href="home.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+    <script src="eyes.js" defer></script>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <button id="music-toggle" onclick="toggleMusic()">🔇</button>
+        <div class="title-img">
+            <img src="img/title.png">
+        </div>
+        <div class="circle-logo">
+            <div id="logo-canvas"></div> <!-- used for p5.js canvas -->
+        </div>
+    </div>
+
+    <div id="ghost-container"></div>
+
+    <!-- Buttons -->
+    <div class="button-container">
+        <div class="button-row">
+            <div class="button" onclick="location.href='scene1.html'">
+                <img src="img/1.jpg" alt="Thumbnail 1">
+                <span>Haunted House</span>
+            </div>
+            <div class="divider"></div>
+            <div class="button" onclick="location.href='scene2.html'">
+                <img src="img/2.png" alt="Thumbnail 2">
+                <span>Zombie Villa</span>
+            </div>
+        </div>
+        <div class="button-row">
+            <div class="button" onclick="location.href='scene3.html'">
+                <img src="img/3.png" alt="Thumbnail 3">
+                <span>Skull House</span>
+            </div>
+            <div class="divider"></div>
+            <div class="button" onclick="location.href='scene4.html'">
+                <img src="img/head swap.png" alt="Thumbnail 4">
+                <span>Head Swap</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

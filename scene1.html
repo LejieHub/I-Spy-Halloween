@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Image Reveal with p5.js Mask</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="intro-text">Help Catch As Many Ghosts As You Can!</div>
+  
+  <header class="header">
+    <button id="play-button" onclick="toggleAudio()">🔊</button>
+    <audio id="background-audio" src="audio/BGM.wav" preload="auto"></audio>
+    <div class="prompt">Can You See What I See?</div>
+    <div class="info">
+      <div>Time: <span class="time" style="color: rgb(255, 0, 51);">60</span></div>
+      <div>Score: <span class="score" style="color: rgb(72, 255, 0);">0</span></div>
+    </div>
+    <button class="back-button" onclick="history.back()">Go Back</button>
+  </header>
+  
+  <!-- add canvas -->
+  <canvas id="canvas"></canvas>
+
+  
+  <script src="script.js"></script>
+</body>
+</html>

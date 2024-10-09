@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Canvas 蒙版小游戏</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      height: 100%;
+    }
+    #canvas {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="canvas"></canvas>
+
+<script>
+  // 获取 canvas 和上下文
+  const canvas = document.getElementById('canvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  let shapes = [];
+  const maskSize = 150; // 鼠标的“窗口”大小
+  let bgImg, shapeImg;
+  let lastGhostTime = 0; // 记录上次生成 ghost 的时间
+  const ghostInterval = 3000; // 每 3 秒生成一个 ghost
+  const ghostStayDuration = 5000; // ghost 停留 2 秒
+
+  // 加载背景图片和图形图片
+  function loadImages() {
+    bgImg = new Image();
+    shapeImg = new Image();
+
+    bgImg.src = 'img/1.jpg'; // 背景图片路径
+    shapeImg.src = 'img/ghost.png'; // 图形图片路径
+
+    // 当图片加载完成后，启动动画循环
+    bgImg.onload = shapeImg.onload = function() {
+      requestAnimationFrame(draw);
+    }
+  }
+
+  // 绘制函数
+  function draw(timestamp) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // 每三秒生成一个随机位置的 ghost
+    if (timestamp - lastGhostTime > ghostInterval) {
+      shapes.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        size: Math.random() * 50 + 50, // 图形大小
+        opacity: 1, // 初始透明度
+        createdTime: timestamp, // 记录创建的时间
+        isFading: false // 记录是否开始消失
+      });
+      lastGhostTime = timestamp; // 更新最后生成 ghost 的时间
+      console.log('生成了新的 ghost');
+    }
+
+    // 绘制蒙版效果
+    drawMask();
+
+    requestAnimationFrame(draw);
+  }
+
+  // 绘制蒙版（只有圆形区域显示背景和ghost）
+  function drawMask() {
+    // 绘制黑色遮罩覆盖整个画面
+    ctx.fillStyle = 'black';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // 在蒙版上通过圆形窗口显示背景和 ghost
+    ctx.save();
+
+    // 定义圆形剪切区域，露出圆形区域
+    ctx.beginPath();
+    ctx.arc(mouseX, mouseY, maskSize, 0, Math.PI * 2);
+    ctx.clip(); // 剪切，限制绘图范围在圆内
+
+    // 在圆形区域内绘制背景图片
+    ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
+
+    // 绘制所有 ghost
+    shapes = shapes.filter(shape => shape.opacity > 0);
+    shapes.forEach(shape => {
+      const elapsed = performance.now() - shape.createdTime;
+
+      if (elapsed > ghostStayDuration) {
+        shape.isFading = true; // 超过停留时间，开始消失
+      }
+
+      if (shape.isFading) {
+        shape.opacity -= 0.01; // 开始逐渐减少透明度
+      }
+
+      ctx.globalAlpha = shape.opacity; // 设置透明度
+      ctx.drawImage(shapeImg, shape.x, shape.y, shape.size, shape.size);
+    });
+
+    ctx.restore(); // 恢复剪切状态
+    ctx.globalAlpha = 1; // 恢复透明度
+  }
+
+  let mouseX = canvas.width / 2;
+  let mouseY = canvas.height / 2;
+
+  // 更新鼠标位置
+  canvas.addEventListener('mousemove', (event) => {
+    mouseX = event.clientX;
+    mouseY = event.clientY;
+  });
+
+  // 调整画布大小
+  window.addEventListener('resize', () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  });
+
+  loadImages();
+
+</script>
+
+</body>
+</html>

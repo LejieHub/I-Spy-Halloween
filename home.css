@@ -1,0 +1,123 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #000000;
+}
+
+/* Header decorative */
+.header {
+    background-color: #be5513;
+    color: #ffffff;
+    position: relative;
+    text-align: center;
+}
+
+.title-img img {
+    height: 300px;
+}
+
+/* Header logo */
+.header .circle-logo {
+    width: 90px;
+    height: 90px;
+    background-color: #ffffff;
+    border-radius: 50%;
+    position: absolute;
+    bottom: -45px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10; /* Make sure the logo is above the content */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#logo-canvas {
+    width: 90px;
+    height: 90px;
+    overflow: hidden;
+    border-radius: 50%;
+}
+
+
+/* Center the buttons */
+.button-container {
+    display: flex;
+    flex-direction: column; /* Arrange the buttons in columns */
+    align-items: center;
+    padding: 100px 20px;
+}
+
+/* Containers for buttons and dividers */
+.button-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 10px 0;
+}
+
+/* Button style */
+.button {
+    width: 280px;
+    height: 70px;
+    background-color: #fff;
+    border: 3px solid #f47321;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 4px;
+    margin: 0 10px; /* Spacing between buttons */
+}
+
+.button img {
+    width: 100px;
+    height: 60px;
+    margin: 10px;
+}
+
+.button span {
+    flex-grow: 1;
+    text-align: center;
+    font-size: 18px;
+}
+
+.button:hover {
+    background-color: #ddd;
+    transform: scale(1.05);
+}
+
+.button:active {
+    background-color: #ccc;
+}
+
+/* Vertical line decoration */
+.divider {
+    width: 2px;
+    height: 70px; /* same height */
+    background-color: #333;
+}
+
+.ghost {
+    position: absolute;
+    width: 100px;
+    height: auto;
+    opacity: 0;
+    transition: transform 5s ease, opacity 5s ease; /* animation */
+}
+
+#music-toggle {
+    position: absolute;
+    left: 20px;
+    top: 20px;
+    padding: 10px;
+    font-size: 24px;
+    background-color: transparent;
+    border: none;
+    color: white;
+    cursor: pointer;
+}
+
+#music-toggle:hover {
+    color: #f47321;
+}

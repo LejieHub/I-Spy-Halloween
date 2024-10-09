@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>360° Scene</title>
+    <style>
+         body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        /* header */
+        .scene-header {
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 10;
+        }
+
+        .scene-header span {
+            font-size: 24px;
+        }
+
+        canvas {
+            display: block;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+    <!-- scene name -->
+    <div class="scene-header">
+        <span>Scene 4</span>
+    </div>
+    <script>
+        let scene, camera, renderer;
+        let isUserInteracting = false,
+            lon = 0, lat = 0,
+            phi = 0, theta = 0,
+            target = new THREE.Vector3();
+
+        init();
+        animate();
+
+        function init() {
+            const container = document.createElement('div');
+            document.body.appendChild(container);
+
+            // scene
+            scene = new THREE.Scene();
+
+            // camera
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1100);
+
+            // renderer
+            renderer = new THREE.WebGLRenderer();
+            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            container.appendChild(renderer.domElement);
+
+            // Add 360 texture
+            const geometry = new THREE.SphereGeometry(500, 60, 40);
+            geometry.scale(-1, 1, 1);  // inverse it
+
+            const texture = new THREE.TextureLoader().load('img/head swap.png'); // change to custom img
+            const material = new THREE.MeshBasicMaterial({ map: texture });
+
+            const mesh = new THREE.Mesh(geometry, material);
+            scene.add(mesh);
+
+            // eventlistener
+            document.addEventListener('mousedown', onPointerStart, false);
+            document.addEventListener('mousemove', onPointerMove, false);
+            document.addEventListener('mouseup', onPointerUp, false);
+
+            window.addEventListener('resize', onWindowResize, false);
+        }
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        function onPointerStart(event) {
+            isUserInteracting = true;
+            onPointerDownPointerX = event.clientX;
+            onPointerDownPointerY = event.clientY;
+
+            onPointerDownLon = lon;
+            onPointerDownLat = lat;
+        }
+
+        function onPointerMove(event) {
+            if (isUserInteracting === true) {
+                lon = (onPointerDownPointerX - event.clientX) * 0.1 + onPointerDownLon;
+                lat = (event.clientY - onPointerDownPointerY) * 0.1 + onPointerDownLat;
+            }
+        }
+
+        function onPointerUp() {
+            isUserInteracting = false;
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            update();
+        }
+
+        function update() {
+            lat = Math.max(-85, Math.min(85, lat));
+            phi = THREE.Math.degToRad(90 - lat);
+            theta = THREE.Math.degToRad(lon);
+
+            target.x = 500 * Math.sin(phi) * Math.cos(theta);
+            target.y = 500 * Math.cos(phi);
+            target.z = 500 * Math.sin(phi) * Math.sin(theta);
+
+            camera.lookAt(target);
+
+            renderer.render(scene, camera);
+        }
+    </script>
+</body>
+</html>
