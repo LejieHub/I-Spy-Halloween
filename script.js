@@ -134,6 +134,22 @@ function drawMask() {
 
   ctx.restore(); // Resume clipping
   ctx.globalAlpha = 1; // Restore transparency
+
+  // Draw crosshair at the center of the circular mask
+  ctx.strokeStyle = 'white';
+  ctx.lineWidth = 2;
+  
+  // Horizontal line
+  ctx.beginPath();
+  ctx.moveTo(mouseX - 10, mouseY - 90);  // 10 pixels left
+  ctx.lineTo(mouseX + 10, mouseY - 90);  // 10 pixels right
+  ctx.stroke();
+
+  // Vertical line
+  ctx.beginPath();
+  ctx.moveTo(mouseX, mouseY - 100); // 10 pixels up
+  ctx.lineTo(mouseX, mouseY - 80);  // 10 pixels down
+  ctx.stroke();
 }
 
 let mouseX = canvas.width / 2;
